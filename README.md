@@ -31,6 +31,7 @@ import cn.kuick.blockchain.web3.provider.Web3jSignerProvider;
 //initialization
 Signer signer = new PrivateKeySigner(toAddress, privateKey);
 Web3jService web3jService = new Web3jSignerProvider(URL, signer);
+
 //web3j method
 Web3j web3j = Web3j.build(web3jService);
 
@@ -47,7 +48,7 @@ Web3j web3j = Web3j.build(web3jService);
 Transaction transaction = new Transaction(fromAddress,nonce,gasPrice,gasLimit,receiveAddress,value,data);
 
 //use web3j
- web3j.ethSendTransaction(transaction).observable().subscribe(new Subscriber<EthSendTransaction>() {
+web3j.ethSendTransaction(transaction).observable().subscribe(new Subscriber<EthSendTransaction>() {
     @Override
     public void onCompleted() {
 
@@ -64,6 +65,7 @@ Transaction transaction = new Transaction(fromAddress,nonce,gasPrice,gasLimit,re
         String result = ethSendTransaction.getResult();
         Response.Error error = ethSendTransaction.getError();
         String jsonrpc = ethSendTransaction.getJsonrpc();
+        
         if (rawResponse != null) {
             System.out.println("rawResponse:" + rawResponse);
         }
@@ -78,6 +80,4 @@ Transaction transaction = new Transaction(fromAddress,nonce,gasPrice,gasLimit,re
         }
     }
 });
-
-
 ```
