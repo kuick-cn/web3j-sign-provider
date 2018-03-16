@@ -7,6 +7,9 @@ A simple web3 standard provider that signs sendTransaction payloads.
 ```
 repositories {
     maven {
+        url "https://dl.bintray.com/ethereum/maven/"
+    }
+    maven {
         url "http://repo.kuick.cn/artifactory/libs-release-local"
     }
 
