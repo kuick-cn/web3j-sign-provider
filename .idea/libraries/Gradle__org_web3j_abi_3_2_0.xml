@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.web3j:abi:3.2.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.web3j/abi/3.2.0/883947fbfe3647b19991d7995efe203f241d0517/abi-3.2.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.web3j/abi/3.2.0/8e791bf81e52961de9eb8da065ee7739767d05e6/abi-3.2.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
