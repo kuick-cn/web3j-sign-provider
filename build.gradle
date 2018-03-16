@@ -1,5 +1,5 @@
-group 'cn.kuick'
-version '1.0-SNAPSHOT'
+group 'cn.kuick.blockchain'
+version '1.0.2'
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -30,11 +30,16 @@ dependencies {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "http://repo.kuick.cn/artifactory/libs-snapshot-local/") {
+            repository(url: "http://repo.kuick.cn/artifactory/libs-release-local/") {
                 authentication(userName: "deployer", password: "deployerServer!")
             }
+
+            snapshotRepository(url: "http://repo.kuick.cn/artifactory/libs-snapshot-local/") {
+                authentication(userName: "deployer", password: "deployerServer!")
+            }
+
             pom.project {
-                name='cn.kuick:web3j-sign-provider'
+                name='cn.kuick.blockchain:web3j-sign-provider'
                 packaging='jar'
                 description='A simple web3 standard provider that signs sendTransaction payloads.'
             }

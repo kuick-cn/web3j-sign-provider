@@ -5,7 +5,18 @@ A simple web3 standard provider that signs sendTransaction payloads.
 ## Install
 
 ```
+repositories {
+    maven {
+        url "http://repo.elanding.cn/artifactory/libs-release-local"
+    }
 
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile(group: 'cn.kuick.blockchain', name: 'web3j-sign-provider', version: '1.0.2')
+}
 ```
 
 ## Usage
