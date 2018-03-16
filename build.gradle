@@ -1,0 +1,52 @@
+group 'cn.kuick.blockchain'
+version '1.0.2'
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.8
+
+configurations {
+    deployerJars
+}
+
+repositories {
+    maven {
+        url "http://maven.aliyun.com/nexus/content/groups/public"
+    }
+    maven {
+        url "https://dl.bintray.com/ethereum/maven/"
+    }
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.ethereum:ethereumj-core:1.6.+"
+    compile ('org.web3j:core:3.2.0')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://repo.kuick.cn/artifactory/libs-release-local/") {
+                authentication(userName: "deployer", password: "deployerServer!")
+            }
+
+            snapshotRepository(url: "http://repo.kuick.cn/artifactory/libs-snapshot-local/") {
+                authentication(userName: "deployer", password: "deployerServer!")
+            }
+
+            pom.project {
+                name='cn.kuick.blockchain:web3j-sign-provider'
+                packaging='jar'
+                description='A simple web3 standard provider that signs sendTransaction payloads.'
+            }
+        }
+    }
+}
+
+artifacts {
+    archives jar
+}
