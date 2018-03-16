@@ -1,17 +1,17 @@
 package cn.kuick.blockchain.web3.provider;
 
-import cn.kuick.blockchain.web3.provider.Web3jSignerProvider;
-import cn.kuick.blockchain.web3.signer.PrivateKeySigner;
-import cn.kuick.blockchain.web3.signer.Signer;
+import java.math.BigInteger;
+import rx.Subscriber;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import rx.Subscriber;
 
-import java.math.BigInteger;
+import cn.kuick.blockchain.web3.signer.Signer;
+import cn.kuick.blockchain.web3.signer.PrivateKeySigner;
+import cn.kuick.blockchain.web3.provider.Web3jSignerProvider;
 
 public class Web3jSignerProviderTest {
     public static void main(String[] args) throws Exception {
@@ -25,7 +25,6 @@ public class Web3jSignerProviderTest {
         BigInteger gasLimit = new BigInteger("21000");
         BigInteger value = new BigInteger("1000000000000000000"); //1000000000000000000
         String data = null;
-
 
         Signer signer = new PrivateKeySigner(toAddress, privateKey);
         Web3jService web3jService = new Web3jSignerProvider(URL, signer);
@@ -51,20 +50,23 @@ public class Web3jSignerProviderTest {
                 String result = ethSendTransaction.getResult();
                 Response.Error error = ethSendTransaction.getError();
                 String jsonrpc = ethSendTransaction.getJsonrpc();
+                
                 if (rawResponse != null) {
                     System.out.println("rawResponse:" + rawResponse);
                 }
+                
                 if (result != null) {
                     System.out.println("result:" + result);
                 }
+                
                 if (error != null) {
                     System.out.println("error:" + error.getMessage());
                 }
+                
                 if (jsonrpc != null) {
                     System.out.println("jsonrpc:" + jsonrpc);
                 }
             }
         });
-
     }
 }
