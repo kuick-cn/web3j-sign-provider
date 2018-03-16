@@ -23,10 +23,10 @@ public class Web3jSignerProviderTest {
         
         BigInteger gasPrice = new BigInteger("5000000000");
         BigInteger gasLimit = new BigInteger("21000");
-        BigInteger value = new BigInteger("1000000000000000000"); //1000000000000000000
+        BigInteger value = new BigInteger("1000000000000000000");
         String data = null;
 
-        Signer signer = new PrivateKeySigner(toAddress, privateKey);
+        Signer signer = new PrivateKeySigner(privateKey);
         Web3jService web3jService = new Web3jSignerProvider(URL, signer);
 
         Web3j web3j = Web3j.build(web3jService);
