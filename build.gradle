@@ -42,7 +42,6 @@ uploadArchives {
     }
 }
 
-
 artifacts {
     archives jar
 }
