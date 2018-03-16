@@ -7,19 +7,13 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import java.math.BigInteger;
 
 public class PrivateKeySigner implements Signer {
-    private String toAddress;
     private BigInteger privateKey;
 
-    public PrivateKeySigner(String toAddress, BigInteger privateKey) throws Exception {
+    public PrivateKeySigner(BigInteger privateKey) throws Exception {
         if (privateKey == null) {
             throw new Exception("privateKey is null");
         }
-        
-        if (toAddress == null) {
-            throw new Exception("toAddress is null");
-        }
 
-        this.toAddress = toAddress;
         this.privateKey = privateKey;
     }
 
@@ -30,6 +24,7 @@ public class PrivateKeySigner implements Signer {
         String gasPrice;
         String gasLimit;
         String data;
+        String toAddress;
 
         if (transaction.getValue().length() % 2 == 0) {
             value = transaction.getValue().replace("0x", "");
@@ -61,6 +56,14 @@ public class PrivateKeySigner implements Signer {
             data = transaction.getData().replace("0x","");
         } else {
             data = transaction.getData().replace("0x","0");
+        }
+
+        if (transaction.getTo() == null) {
+            throw new Exception("receiveAddress is null");
+        } else if (transaction.getTo().length() % 2 == 0) {
+            toAddress = transaction.getTo().replace("0x","");
+        } else {
+            toAddress = transaction.getTo().replace("0x","0");
         }
 
         if (gasLimit == null) {

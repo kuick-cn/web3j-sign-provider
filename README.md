@@ -29,7 +29,7 @@ import cn.kuick.blockchain.web3.provider.Web3jSignerProvider;
 //...
 
 //initialization
-Signer signer = new PrivateKeySigner(toAddress, privateKey);
+Signer signer = new PrivateKeySigner(privateKey);
 Web3jService web3jService = new Web3jSignerProvider(URL, signer);
 
 //web3j method
