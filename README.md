@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile(group: 'cn.kuick.blockchain', name: 'web3j-sign-provider', version: '1.0.2')
+    compile(group: 'cn.kuick.blockchain', name: 'web3j-sign-provider', version: '1.1.0')
 }
 ```
 
