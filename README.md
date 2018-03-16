@@ -22,6 +22,12 @@ dependencies {
 ## Usage
 
 ```java
+import cn.kuick.blockchain.web3.signer.Signer;
+import cn.kuick.blockchain.web3.signer.PrivateKeySigner;
+import cn.kuick.blockchain.web3.provider.Web3jSignerProvider;
+
+//...
+
 //initialization
 Signer signer = new PrivateKeySigner(toAddress, privateKey);
 Web3jService web3jService = new Web3jSignerProvider(URL, signer);
