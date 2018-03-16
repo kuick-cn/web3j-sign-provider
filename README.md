@@ -7,7 +7,7 @@ A simple web3 standard provider that signs sendTransaction payloads.
 ```
 repositories {
     maven {
-        url "http://repo.elanding.cn/artifactory/libs-release-local"
+        url "http://repo.kuick.cn/artifactory/libs-release-local"
     }
 
     jcenter()
