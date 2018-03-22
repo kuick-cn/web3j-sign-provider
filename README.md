@@ -51,36 +51,16 @@ Web3j web3j = Web3j.build(web3jService);
 Transaction transaction = new Transaction(fromAddress,nonce,gasPrice,gasLimit,receiveAddress,value,data);
 
 //use web3j
-web3j.ethSendTransaction(transaction).observable().subscribe(new Subscriber<EthSendTransaction>() {
-    @Override
-    public void onCompleted() {
+EthSendTransaction ethSendTransaction = web3j.ethSendTransaction(transaction).sendAsync().get();
 
-    }
+if (ethSendTransaction == null) {
+    throw new RuntimeException("No response.");
+}
 
-    @Override
-    public void onError(Throwable e) {
+if(ethSendTransaction.getError() != null){
+    throw new RuntimeException(ethSendTransaction.getError().getMessage());
+}
 
-    }
-
-    @Override
-    public void onNext(EthSendTransaction ethSendTransaction) {
-        String rawResponse = ethSendTransaction.getRawResponse();
-        String result = ethSendTransaction.getResult();
-        Response.Error error = ethSendTransaction.getError();
-        String jsonrpc = ethSendTransaction.getJsonrpc();
-        
-        if (rawResponse != null) {
-            System.out.println("rawResponse:" + rawResponse);
-        }
-        if (result != null) {
-            System.out.println("result:" + result);
-        }
-        if (error != null) {
-            System.out.println("error:" + error.getMessage());
-        }
-        if (jsonrpc != null) {
-            System.out.println("jsonrpc:" + jsonrpc);
-        }
-    }
-});
+// poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(<txHash>)
+String transactionHash = ethSendTransaction.getTransactionHash();
 ```
