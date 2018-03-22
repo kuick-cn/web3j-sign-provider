@@ -1,15 +1,17 @@
 package cn.kuick.blockchain.web3.signer;
 
-import org.ethereum.crypto.ECKey;
-import org.spongycastle.util.encoders.Hex;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.utils.Numeric;
 
 import java.math.BigInteger;
 
 public class PrivateKeySigner implements Signer {
-    private BigInteger privateKey;
+    private String privateKey;
 
-    public PrivateKeySigner(BigInteger privateKey) throws Exception {
+    public PrivateKeySigner(String privateKey) throws Exception {
         if (privateKey == null) {
             throw new Exception("privateKey is null");
         }
@@ -19,76 +21,33 @@ public class PrivateKeySigner implements Signer {
 
     @Override
     public String sign(Transaction transaction) throws Exception {
-        String value;
-        String nonce;
-        String gasPrice;
-        String gasLimit;
-        String data;
-        String toAddress;
+        String value = transaction.getValue();
+        String nonce = transaction.getNonce();
+        String gasPrice = transaction.getGasPrice();
+        String gasLimit = transaction.getGas();
+        String data = transaction.getData();
+        String toAddress = transaction.getTo();
 
-        if (transaction.getValue().length() % 2 == 0) {
-            value = transaction.getValue().replace("0x", "");
-        } else {
-            value = transaction.getValue().replace("0x", "0");
-        }
-        
-        if (transaction.getNonce().length() % 2 == 0) {
-            nonce = transaction.getNonce().replace("0x","");
-        } else {
-            nonce = transaction.getNonce().replace("0x","0");
-        }
-        
-        if (transaction.getGasPrice().length() % 2 == 0) {
-            gasPrice = transaction.getGasPrice().replace("0x","");
-        } else {
-            gasPrice = transaction.getGasPrice().replace("0x","0");
-        }
-        
-        if (transaction.getGas().length() % 2 == 0) {
-            gasLimit = transaction.getGas().replace("0x","");
-        } else {
-            gasLimit = transaction.getGas().replace("0x","0");
+        if (toAddress == null) {
+            throw new Exception("toAddress is null");
         }
 
-        if (transaction.getData() == null) {
+        if (data == null) {
             data = "";
-        } else if (transaction.getData().length() % 2 == 0) {
-            data = transaction.getData().replace("0x","");
-        } else {
-            data = transaction.getData().replace("0x","0");
         }
 
-        if (transaction.getTo() == null) {
-            throw new Exception("receiveAddress is null");
-        } else if (transaction.getTo().length() % 2 == 0) {
-            toAddress = transaction.getTo().replace("0x","");
-        } else {
-            toAddress = transaction.getTo().replace("0x","0");
-        }
+        BigInteger gasPriceInt = new BigInteger(gasPrice.replace("0x", ""),16);
+        BigInteger gasLimitInt = new BigInteger(gasLimit.replace("0x", ""),16);
+        BigInteger valueInt = new BigInteger(value.replace("0x", ""),16);
+        BigInteger nonceInt = new BigInteger(nonce.replace("0x", ""),16);
 
-        if (gasLimit == null) {
-            gasLimit = "21000"; //min
-        }
-        
-        if (gasPrice == null) {
-            gasPrice = "5000000000"; //min
-        }
-        
-        if (value == null) {
-            throw new Exception("Value is null");
-        }
-
-        byte[] receiveAddress = Hex.decode(toAddress.replace("0x", ""));
-        byte[] gasPriceByte = Hex.decode(gasPrice.replace("0x", ""));
-        byte[] gasLimitByte = Hex.decode(gasLimit.replace("0x", ""));
-        byte[] valueByte = Hex.decode(value);
-        byte[] dataByte = Hex.decode(data.replace("0x", ""));
-        byte[] nonceByte = Hex.decode(nonce.replace("0x", ""));
-
-        org.ethereum.core.Transaction transactionObj = new org.ethereum.core.Transaction(nonceByte, gasPriceByte, gasLimitByte, receiveAddress, valueByte, dataByte);
-        transactionObj.sign(ECKey.fromPrivate(privateKey));
-
-        return "0x" + Hex.toHexString(transactionObj.getEncoded());
+        //CreateTransaction
+        RawTransaction rawTransaction  = RawTransaction.createTransaction(nonceInt,gasPriceInt,gasLimitInt,toAddress,valueInt,data);
+        //Create Credentials
+        Credentials credentials = Credentials.create(privateKey);
+        //Signer
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        return Numeric.toHexString(signedMessage);
     }
 
 }

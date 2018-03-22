@@ -22,7 +22,7 @@ public class Web3jSignerProvider implements org.web3j.protocol.Web3jService{
     private HttpService service;
     private Signer signer;
 
-    public Web3jSignerProvider(String url, Signer signer) throws Exception {
+    Web3jSignerProvider(String url, Signer signer) throws Exception {
         if (url == null) {
             throw new Exception("url is null");
         }
@@ -30,7 +30,7 @@ public class Web3jSignerProvider implements org.web3j.protocol.Web3jService{
         if (signer == null) {
             throw new Exception("Please initialization signer");
         }
-        
+
         this.service = new HttpService(url);
         this.signer = signer;
     }
@@ -50,14 +50,36 @@ public class Web3jSignerProvider implements org.web3j.protocol.Web3jService{
                 EthGetTransactionCount count = (EthGetTransactionCount) requestCount.send();
                 BigInteger nonce = count.getTransactionCount();
 
+                BigInteger gasLimit;
+                BigInteger gasPrice;
+                BigInteger value;
+
+                if (transactoin.getGas() != null) {
+                    gasLimit = new BigInteger(transactoin.getGas().replace("0x", ""), 16);
+                }else {
+                    gasLimit = new BigInteger("21000");
+                }
+
+                if (transactoin.getGasPrice() != null) {
+                    gasPrice = new BigInteger(transactoin.getGasPrice().replace("0x",""), 16);
+                }else {
+                    gasPrice = new BigInteger("5000000000");
+                }
+
+                if (transactoin.getValue() != null) {
+                    value = new BigInteger(transactoin.getValue().replace("0x", ""), 16);
+                } else {
+                    value = BigInteger.ZERO;
+                }
+
                 //Reconstruction Transaction For Signer
                 Transaction signerTransaction = new Transaction(
                         transactoin.getFrom(),
                         nonce,
-                        new BigInteger(transactoin.getGasPrice().replace("0x",""), 16),
-                        new BigInteger(transactoin.getGas().replace("0x",""), 16),
+                        gasPrice,
+                        gasLimit,
                         transactoin.getTo(),
-                        new BigInteger(transactoin.getValue().replace("0x",""), 16),
+                        value,
                         transactoin.getData()
                 );
 
